@@ -127,6 +127,22 @@ const ToddoList = () => {
 
     }
 
+    const deleteUser = () => {
+        fetch(API_URL +  "/users/judelin",{
+            method: "DELETE",
+            headers: {
+                "Content-Types" : "application/json"
+            }
+        })
+       .then((res)=> {
+        if(!res.ok) throw new Error ("Error to delete all tasks") 
+         setNewTask([])
+        console.log("your tasks delete")
+       })
+       .catch((error)=> console.log("Error:", error ));
+
+    }
+
     return (
         <div className="container">
 
@@ -148,13 +164,13 @@ const ToddoList = () => {
                         tasks.map((task) =>
                             <li className="form-control d-flex justify-content-between"
                                 key={task.id}><span> {task.label} </span>
-                                <button className="delete-button" onClick={() => deletetask(task.id)} >X</button>
                             </li>
                         )
                     }
                     <li className="form-control length"> {tasks.length} item left</li>
                 </ol>
             </div>
+            <button onClick={deleteUser}>delete tasks</button>
 
 
         </div>
