@@ -39,31 +39,31 @@ const ToddoList = () => {
         bringList()
     }, [])
 
-    const showTasks = () => {
-        fetch(API_URL + "/todos/judelin", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "label": imputField,
-                "is_done": false,
-            })
-        })
-            .then(resp => {
-                console.log(resp.ok);
-                console.log(resp.status);
-                return resp.json();
-            })
-            .then(data => {
-                setNewTask(data.todos)
-                console.log(tasks)
-                console.log(data)
-            })
-            .catch(error => {
-                console.log(error)
-            })
-    }
+    // const showTasks = () => {
+    //     fetch(API_URL + "/todos/judelin", {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json"
+    //         },
+    //         body: JSON.stringify({
+    //             "label": imputField,
+    //             "is_done": false,
+    //         })
+    //     })
+    //         .then(resp => {
+    //             console.log(resp.ok);
+    //             console.log(resp.status);
+    //             return resp.json();
+    //         })
+    //         .then(data => {
+    //             setNewTask(data.todos)
+    //             console.log(tasks)
+    //             console.log(data)
+    //         })
+    //         .catch(error => {
+    //             console.log(error)
+    //         })
+    // }
 
 
 
@@ -73,31 +73,29 @@ const ToddoList = () => {
 
     const handleTouch = (e) => {
         if (e.key === "Enter" && imputField.trim() !== "") {
-            // setNewTask([...tasks, imputField])
-            // setImputfield("")
-            fetch(API_URL + "/todos/judelin",{
+            fetch(API_URL + "/todos/judelin", {
                 method: "POST",
-               body:JSON.stringify({
-                "label": imputField,
-                "is_done": false,
-               }),
+                body: JSON.stringify({
+                    "label": imputField,
+                    "is_done": false,
+                }),
                 headers: {
-                "Content-Type": "application/json"
-               },
+                    "Content-Type": "application/json"
+                },
             })
-            .then(resp=> {
-                console.log(resp)
-                if(resp.ok){
-                    setImputfield("")
-                }
-                console.log(resp.status)
-                return resp.json()
-            })
-            .then(data => {
-                console.log(data);
-                setNewTask([...tasks, data])
-            })
-        
+                .then(resp => {
+                    console.log(resp)
+                    if (resp.ok) {
+                        setImputfield("")
+                    }
+                    console.log(resp.status)
+                    return resp.json()
+                })
+                .then(data => {
+                    console.log(data);
+                    setNewTask([...tasks, data])
+                })
+
         }
     }
 
@@ -109,37 +107,38 @@ const ToddoList = () => {
     //     setImputfield("")
     // }
 
-    const deletetask = (id) => {
+    const deleteTask = (id) => {
         // const upDateTask = tasks.filter((_, ind) => ind !== index);
         // setNewTask(upDateTask)
-        fetch(`${API_URL}/todos/${id}`,{
-            method:"DELETE",
-            headers:{
-                "Content-Type":"application/json"
+        fetch(`${API_URL}/todos/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
             }
         })
-       .then((res) => {
-        if (!res.ok) throw new Error("Failed to delete todo");
-        // Update UI after successful delete
-        setNewTask((prevTodos) => prevTodos.filter((task) => task.id !== id));
-      })
-      .catch((err) => console.error("Error:", err));
+            .then((res) => {
+                if (!res.ok) throw new Error("Failed to delete todo");
+                // Update UI after successful delete
+                setNewTask((prevTodos) => prevTodos.filter((task) => task.id !== id));
+            })
+            .catch((err) => console.error("Error:", err));
 
     }
 
-    const deleteUser = () => {
-        fetch(API_URL +  "/users/judelin",{
+    const deleteUser = async () => {
+        fetch(API_URL + "/users/judelin", {
             method: "DELETE",
             headers: {
-                "Content-Types" : "application/json"
+                "Content-Types": "application/json"
             }
         })
-       .then((res)=> {
-        if(!res.ok) throw new Error ("Error to delete all tasks") 
-         setNewTask([])
-        console.log("your tasks delete")
-       })
-       .catch((error)=> console.log("Error:", error ));
+            .then((res) => {
+                if (!res.ok) throw new Error("Error to delete all tasks")
+                createUser()
+                setNewTask([])
+                console.log("your tasks delete")
+            })
+            .catch((error) => console.log("Error:", error));
 
     }
 
@@ -164,15 +163,16 @@ const ToddoList = () => {
                         tasks.map((task) =>
                             <li className="form-control d-flex justify-content-between"
                                 key={task.id}><span> {task.label} </span>
+                                <button className="delete-button" onClick={() => deleteTask(task.id)} >X</button>
                             </li>
                         )
                     }
                     <li className="form-control length"> {tasks.length} item left</li>
                 </ol>
             </div>
-            <button onClick={deleteUser}>delete tasks</button>
-
-
+            <div className="text-center">
+                <button className="btn btn-secondary" onClick={deleteUser} >delete all tasks</button>
+            </div>
         </div>
     )
 }

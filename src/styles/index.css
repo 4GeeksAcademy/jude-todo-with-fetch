@@ -56,16 +56,14 @@ input:focus {
     outline: none;
     transition: 0.1s;
     color: rgba(149, 146, 146, 0.982);
+    background:rgba(241, 240, 240, 0.332);
+    border-radius: 1rem;
     font-size: 2rem;
     font-weight: 150;
 }
-input:hover{
-   background: white;
-}
 
-.add-button {
-    display: none;
-}
+
+
 
 input::placeholder {
     font-weight: 150;
